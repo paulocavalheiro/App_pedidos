@@ -1,0 +1,130 @@
+.prato_container {
+   text-align: center;
+}
+
+.card {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   padding: 1em 1em;
+   margin-bottom: 2em;
+   width: 100%;
+   border-radius: 1em;
+   border: 2px solid #e33d33;
+   box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.5);
+   background-color: #333;
+   color: #fff;
+}
+
+.card .id {
+   margin: 1em 0;
+   background-color: #807b7b;
+   border-radius: 8px;
+   padding: 3px;
+   color: #fff;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.categoria_container {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.categoria {
+   padding: 0.6em 1em;
+   color: #fff;
+   background-color: #000;
+   margin-right: 0.5em;
+   border: 1px solid #ccc;
+   border-radius: 6px;
+   text-transform: uppercase;
+   font-size: 0.8em;
+}
+
+.type_normal {
+   background-color: #aa9;
+}
+
+.type_fire {
+   background-color: #f42;
+}
+
+.type_water {
+   background-color: #39f;
+}
+
+.type_eletric {
+   background-color: #fc3;
+}
+
+.type_grass {
+   background-color: #7c5;
+}
+
+.type_ice {
+   background-color: #6cf;
+}
+
+.type_fighting {
+   background-color: #b54;
+}
+
+.type_poison {
+   background-color: #a59;
+}
+
+.type_ground {
+   background-color: #db5;
+}
+
+.type_flying {
+   background-color: #89f;
+}
+
+.type_psychic {
+   background-color: #f59;
+}
+
+.type_bug {
+   background-color: #ab2;
+}
+
+.type_rock {
+   background-color: #ba6;
+}
+
+.type_ghost {
+   background-color: #66b;
+}
+
+.type_dragon {
+   background-color: #76e;
+}
+
+.type_dark {
+   background-color: #754;
+}
+
+.type_steel {
+   background-color: #aab;
+}
+
+.type_fairy {
+   background-color: #e9e;
+}
+
+.desc_container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   padding: 15px;
+}
+
+.data_height {
+   border-right: 1px solid #ccc;
+}
