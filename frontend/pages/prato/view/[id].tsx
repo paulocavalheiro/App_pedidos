@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import styles from '../../styles/Viewprato.module.css'
+import styles from '../../../styles/Viewprato.module.css'
 import {
    Box,
    Button,
@@ -10,11 +10,11 @@ import {
    Typography,
 } from '@mui/material'
 import { useRouter } from 'next/router'
-import { api } from '../../services/api'
+import { api } from '../../../services/api'
 import Link from 'next/link'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import AvTimerIcon from '@mui/icons-material/AvTimer'
-import SnackBarAlert, { SnackType } from '../../mui_component/SnackBarAlert'
+import SnackBarAlert, { SnackType } from '../../../mui_component/SnackBarAlert'
 
 type GenericDataType = {
    [key: string]: any

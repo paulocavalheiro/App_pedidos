@@ -15,10 +15,10 @@ export default function Navbar() {
             </Box>
             <ul className={styles.link_items}>
                <li>
-                  <Link href="/prato_list">Ver cardápio</Link>
+                  <Link href="/prato/">Ver cardápio</Link>
                </li>
                <li>
-                  <Link href="/prato_cadastro">Cadastrar cardápio</Link>
+                  <Link href="/prato/create">Cadastrar cardápio</Link>
                </li>
                <li>
                   <Link href="/#">Pedidos</Link>

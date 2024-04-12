@@ -13,14 +13,13 @@ export interface Prato {
 }
 
 export default function Card({ prato }: { prato: Prato }) {
-   console.log(prato)
    return (
       <>
          <Box className={styles.card}>
             <p className={styles.id}>#{prato.id}</p>
             <h3 className={styles.title}>{prato.nome}</h3>
             <h3 className={styles.title}>R${prato.preco}</h3>
-            <Link href={`/viewprato/${prato.id}`}>
+            <Link href={`prato/view/${prato.id}`}>
                <Button variant="outlined" color="warning">
                   Visualizar
                </Button>

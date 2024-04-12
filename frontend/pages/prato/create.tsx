@@ -10,12 +10,12 @@ import {
    Typography,
 } from '@mui/material'
 import { NextPage } from 'next'
-import styles from './../styles/Prato_list.module.css'
+import styles from './../../styles/Prato_list.module.css'
 import { useFormik } from 'formik'
 import React, { useEffect, useState } from 'react'
 import * as yup from 'yup'
 import { AccessTimeFilled } from '@mui/icons-material'
-import { api } from '../services/api'
+import { api } from '../../services/api'
 
 const validationSchema = yup.object({
    nome: yup.string().required('Campo obrigatório'),
@@ -28,7 +28,7 @@ const validationSchema = yup.object({
       .nullable(),
 })
 
-const PratoCadastro: NextPage = () => {
+const PratoCreate: NextPage = () => {
    const [users, setUsers] = useState([])
    const formPrato = useFormik({
       initialValues: {
@@ -245,4 +245,4 @@ const PratoCadastro: NextPage = () => {
       </>
    )
 }
-export default PratoCadastro
+export default PratoCreate

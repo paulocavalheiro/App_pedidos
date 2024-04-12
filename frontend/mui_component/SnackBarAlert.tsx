@@ -27,9 +27,10 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 })
 
 export default function SnackBarAlert(props: {
-   setSnackMessage: Dispatch<SetStateAction<SnackType>>
+   setSnackMessage: Dispatch<SetStateAction<any>>
    params: SnackType
 }) {
+   
    const handleClose = (
       event?: React.SyntheticEvent | Event,
       reason?: string
