@@ -10,4 +10,9 @@ export type TransactionApiType = {
    code?: number | null
 }
 
+// status get reactQuery
+export interface StatusQueryProps {
+   status: 'success' | 'error' | 'loading' | null
+}
+
 

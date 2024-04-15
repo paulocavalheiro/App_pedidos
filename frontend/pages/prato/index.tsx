@@ -1,27 +1,26 @@
 import type { NextPage } from 'next'
 import styles from '../../styles/Cardapio.module.css'
 import Card from '../../Layout_component/Card'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { Box } from '@mui/material'
-import { api } from '../../services/api'
+import { useEffect } from 'react'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import SnackBarAlert, { SnackType } from '../../mui_component/SnackBarAlert'
 import { getCardapio } from './hooks/getCardapio'
 import { useSnackBar } from '../../hooks/setSnackMsg'
 
-
 const PratoList: NextPage = () => {
-   const { cardapio,  transactionApi } = getCardapio()
+   const { data, statusQuery } = getCardapio()
    const [snackMessage, setSnackMessage] = useSnackBar()
-
+   
    useEffect(() => {
-      if (transactionApi.error === true) {
+      if (statusQuery === 'error') {
          setSnackMessage({
-            show: transactionApi.error,
-            msg: transactionApi.msg,
+            show: true,
+            msg: 'Erro, não foi possivel buscar os dados do cardápio',
             type: 'error',
          })
       }
-   }, [transactionApi])
+   }, [statusQuery])
+
 
    return (
       <>
@@ -31,8 +30,21 @@ const PratoList: NextPage = () => {
             </h1>
          </Box>
          <Box className={styles.cardapio_container}>
-            {cardapio &&
-               cardapio.map((item: any, index: number) => (
+            <Box
+               className={'statusQuery'}
+               sx={{
+                  visibility: statusQuery === 'loading' ? 'visible' : 'hidden',
+               }}
+            >
+               <CircularProgress color="secondary" />
+               <Typography variant="h6" sx={{ pl: '10px' }}>
+                  Carregando...
+               </Typography>
+            </Box>
+            {data &&
+               data.length > 0 &&
+               statusQuery === 'success' &&
+               data.map((item: any, index: number) => (
                   <Card key={index} prato={item} />
                ))}
          </Box>

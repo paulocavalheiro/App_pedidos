@@ -13,3 +13,10 @@
    color: #e33d33;
    border-color: unset !important;
 }
+
+.statusQuery {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width: 100%;
+}

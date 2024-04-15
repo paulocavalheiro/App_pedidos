@@ -1,18 +1,22 @@
-import { GenericDataType, StatusQueryProps } from '../../../services/types'
 import { api } from '../../../services/api'
+import { GenericDataType, StatusQueryProps } from '../../../services/types'
+import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 
 /**
- * retorna lista de pratos
- * @returns {cardapio: GenericDataType, transactionApi: TransactionApiType}
+ * retorna visualização do prato
+ * @returns {pratoView: GenericDataType, transactionApi: TransactionApiType}
  */
-export const getCardapio = (): GenericDataType => {
+export const viewCardapio = (): GenericDataType => {
    let statusQuery: StatusQueryProps['status'] = null;
+   const router = useRouter()
+   const { id } = router.query
 
    const { isLoading, data, error } = useQuery<GenericDataType>({
-      queryKey: ['cardapio'],
-      queryFn: getCardapio,
+      queryKey: ['getprato'],
+      queryFn: getprato,
       refetchOnWindowFocus: false,
+      enabled: !!id
    })
    
    if (isLoading) {
@@ -25,20 +29,21 @@ export const getCardapio = (): GenericDataType => {
       return { data: null, statusQuery }
    }
 
-   if (data) {
-      return data && data.length > 0
+   if (data) { 
+      return data && data?.id
          ? { data, statusQuery: statusQuery = 'success' }
          : { data: null, statusQuery: statusQuery = 'error' }
    } else {
       statusQuery = null
       return { data: null, statusQuery }
    }
-   async function getCardapio() {
+
+   async function getprato() {
       try {
-         const { data } = await api.get('api/prato/listar')
+         const { data } = await api.get(`api/prato/visualizar/${id}`)
          return data
       } catch (error) {
-         return error
+         return error   
       }
-   }
+   }   
 }
