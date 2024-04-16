@@ -57,9 +57,10 @@ const PratoCreate: NextPage = () => {
          status: true,
       },
       validationSchema: validationSchema,
-      onSubmit: async (values) => {
-         if(values){
+      onSubmit: async (values, { resetForm }) => {
+         if (values) {
             const responsePost = await createPrato(values)
+            responsePost.status === 201 ? resetForm() : ''
             setSnackMessage({
                show: responsePost.status === 201,
                msg: 'Sucesso, prato cadastrado',
@@ -67,10 +68,13 @@ const PratoCreate: NextPage = () => {
             })
             setSnackMessage({
                show: responsePost.response.status === 400,
-               msg: "Erro, não foi possivel cadastrar o prato",
+               msg: 'Erro, não foi possivel cadastrar o prato',
                type: 'error',
             })
-         }        
+            
+            
+         }
+         
       },
    })
 
