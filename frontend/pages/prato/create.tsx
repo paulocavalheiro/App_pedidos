@@ -16,6 +16,10 @@ import React, { useEffect, useState } from 'react'
 import * as yup from 'yup'
 import { AccessTimeFilled } from '@mui/icons-material'
 import { api } from '../../services/api'
+import { getCategoria } from './hooks/getCategoria'
+import { useSnackBar } from '../../hooks/setSnackMsg'
+import SnackBarAlert from '../../mui_component/SnackBarAlert'
+import postPrato from './hooks/postPrato'
 
 const validationSchema = yup.object({
    nome: yup.string().required('Campo obrigatório'),
@@ -29,7 +33,20 @@ const validationSchema = yup.object({
 })
 
 const PratoCreate: NextPage = () => {
-   const [users, setUsers] = useState([])
+   const { data: dataCategoria, statusQuery: statusQueryCategoria } = getCategoria()  
+   const createPrato = postPrato 
+   const [snackMessage, setSnackMessage] = useSnackBar()
+   
+   useEffect(() => {
+      if (statusQueryCategoria === 'error') {
+         setSnackMessage({
+            show: true,
+            msg: 'Erro, não foi possivel buscar os dados da categoria',
+            type: 'error',
+         })
+      }
+   }, [statusQueryCategoria])
+
    const formPrato = useFormik({
       initialValues: {
          nome: '',
@@ -40,71 +57,22 @@ const PratoCreate: NextPage = () => {
          status: true,
       },
       validationSchema: validationSchema,
-      onSubmit: (values) => {
-         console.log(values)
+      onSubmit: async (values) => {
+         if(values){
+            const responsePost = await createPrato(values)
+            setSnackMessage({
+               show: responsePost.status === 201,
+               msg: 'Sucesso, prato cadastrado',
+               type: 'success',
+            })
+            setSnackMessage({
+               show: responsePost.response.status === 400,
+               msg: "Erro, não foi possivel cadastrar o prato",
+               type: 'error',
+            })
+         }        
       },
    })
-
-   async function getCategoria() {
-      try {
-         const response = await api.get('api/categoria/listar')
-         console.log(response)
-         // setPratoView(response.data)
-      } catch (error) {
-         // setSnackMessage({
-         //    show: true,
-         //    msg: 'Erro, não foi possivel buscar os dados do prato',
-         //    type: 'error',
-         // })
-      }
-   }
-
-   const top100Films = [
-      { title: 'The Shawshank Redemption', year: 1994 },
-      { title: 'The Godfather', year: 1972 },
-      { title: 'The Godfather: Part II', year: 1974 },
-      { title: 'The Dark Knight', year: 2008 },
-      { title: '12 Angry Men', year: 1957 },
-      { title: "Schindler's List", year: 1993 },
-      { title: 'Pulp Fiction', year: 1994 },
-      {
-         title: 'The Lord of the Rings: The Return of the King',
-         year: 2003,
-      },
-   ]
-
-   const options = top100Films.map((option) => {
-      const firstLetter = option.title[0].toUpperCase()
-      return {
-         firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
-         ...option,
-      }
-   })
-
-   useEffect(() => {
-      // async function getCategoria() {
-      //    try {
-      //       const response = await api.get('api/categoria/listar')
-      //       console.log(response)
-      //       // setPratoView(response.data)
-      //    } catch (error) {
-      //       // setSnackMessage({
-      //       //    show: true,
-      //       //    msg: 'Erro, não foi possivel buscar os dados do prato',
-      //       //    type: 'error',
-      //       // })
-      //    }
-      // }
-      // getCategoria()
-   }, [])
-
-   // function getRegionsBr() {
-   //    const regions = [`<>
-   //       ${ key: 1, id: 1, nome: 'AC', sigla: 'AC' },
-   //       ${ key: 2, id: 2, nome: 'AL', sigla: 'AL' },
-   //       </>`]
-   //    return regions
-   // }
 
    return (
       <>
@@ -148,27 +116,6 @@ const PratoCreate: NextPage = () => {
                         }
                         sx={{ mt: 2 }}
                      />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                     {/* <Autocomplete
-                        {...formPrato.getFieldProps('categoria')}
-                        sx={{ mt: '24px' }}
-                        disablePortal
-                        id="ac_uf"
-                        fullWidth
-                        size="small"
-                        options={getRegionsBr()}
-                        isOptionEqualToValue={(option, sigla) =>
-                           option.id === sigla.id
-                        }
-                        onChange={(e, newValue) => {
-                           formPrato.setFieldValue('categoria', newValue || '')
-                        }}
-                        renderInput={(params) => (
-                           <TextField {...params} label={'Caegotri'} />
-                        )}
-                     /> */}
                   </Grid>
                   <Grid item xs={6}>
                      <TextField
@@ -221,6 +168,26 @@ const PratoCreate: NextPage = () => {
                         sx={{ mt: 2 }}
                      />
                   </Grid>
+                  <Grid item xs={6} sx={{ mt: '12px' }}>
+                     <Autocomplete
+                        {...formPrato.getFieldProps('categoria')}
+                        disablePortal
+                        id="combo-box-demo"
+                        options={
+                           Array.isArray(dataCategoria) ? dataCategoria : []
+                        }
+                        getOptionLabel={(option) => option.nome || ''}
+                        isOptionEqualToValue={(option, value) =>
+                           option.id === value.id
+                        }
+                        onChange={(e, newValue) => {
+                           formPrato.setFieldValue('categoria', newValue || '')
+                        }}
+                        renderInput={(params) => (
+                           <TextField {...params} label="Categoria" />
+                        )}
+                     />
+                  </Grid>
                   <Grid item xs={6}>
                      <FormControlLabel
                         control={
@@ -241,6 +208,10 @@ const PratoCreate: NextPage = () => {
                   </Grid>
                </Grid>
             </form>
+            <SnackBarAlert
+               setSnackMessage={setSnackMessage}
+               params={snackMessage}
+            />
          </Box>
       </>
    )

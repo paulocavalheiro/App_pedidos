@@ -3,7 +3,7 @@ import styles from '../../styles/Cardapio.module.css'
 import Card from '../../Layout_component/Card'
 import { useEffect } from 'react'
 import { Box, CircularProgress, Typography } from '@mui/material'
-import SnackBarAlert, { SnackType } from '../../mui_component/SnackBarAlert'
+import SnackBarAlert from '../../mui_component/SnackBarAlert'
 import { getCardapio } from './hooks/getCardapio'
 import { useSnackBar } from '../../hooks/setSnackMsg'
 
@@ -20,7 +20,6 @@ const PratoList: NextPage = () => {
          })
       }
    }, [statusQuery])
-
 
    return (
       <>

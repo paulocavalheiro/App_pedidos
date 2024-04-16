@@ -9,7 +9,7 @@ export interface Prato {
    descricao: string
    categoria: string
    preco: number
-   tempo_preparo: number
+   tempoPreparo: number
 }
 
 export default function Card({ prato }: { prato: Prato }) {
@@ -20,7 +20,7 @@ export default function Card({ prato }: { prato: Prato }) {
             <h3 className={styles.title}>{prato.nome}</h3>
             <h3 className={styles.title}>R${prato.preco}</h3>
             <Link href={`prato/view/${prato.id}`}>
-               <Button variant="outlined" color="warning">
+               <Button variant="contained" color="error">
                   Visualizar
                </Button>
             </Link>

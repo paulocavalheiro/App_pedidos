@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import styles from '../../../styles/Viewprato.module.css'
 import {
    Box,
@@ -10,13 +10,11 @@ import {
    Stack,
    Typography,
 } from '@mui/material'
-import { useRouter } from 'next/router'
-import { api } from '../../../services/api'
 import Link from 'next/link'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import AvTimerIcon from '@mui/icons-material/AvTimer'
 import SnackBarAlert, { SnackType } from '../../../mui_component/SnackBarAlert'
-import { viewCardapio } from '../hooks/viewCardapio'
+import { getPrato } from '../hooks/getPrato'
 import { useSnackBar } from '../../../hooks/setSnackMsg'
 
 type GenericDataType = {
@@ -24,10 +22,9 @@ type GenericDataType = {
 }
 
 export default function ViewPratoId() {
-   const { data, statusQuery } = viewCardapio()
+   const { data, statusQuery } = getPrato()
    const [snackMessage, setSnackMessage] = useSnackBar()
 
-   console.log('data',data )
    useEffect(() => {
       if (statusQuery === 'error') {
          setSnackMessage({
@@ -96,7 +93,7 @@ export default function ViewPratoId() {
                   spacing={2}
                >
                   <Link href="../" passHref>
-                     <Button variant="contained" color="warning">
+                     <Button variant="contained" color="error">
                         Voltar
                      </Button>
                   </Link>
