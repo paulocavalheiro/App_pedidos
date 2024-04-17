@@ -16,6 +16,7 @@ import AvTimerIcon from '@mui/icons-material/AvTimer'
 import SnackBarAlert, { SnackType } from '../../../mui_component/SnackBarAlert'
 import { getPrato } from '../hooks/getPrato'
 import { useSnackBar } from '../../../hooks/setSnackMsg'
+import postPedido from '../hooks/postPedido'
 
 type GenericDataType = {
    [key: string]: any
@@ -23,7 +24,12 @@ type GenericDataType = {
 
 export default function ViewPratoId() {
    const { data, statusQuery } = getPrato()
+   const usePostPedido = postPedido
    const [snackMessage, setSnackMessage] = useSnackBar()
+
+   const addPrato = () => {
+      usePostPedido(data)
+   }
 
    useEffect(() => {
       if (statusQuery === 'error') {
@@ -97,7 +103,7 @@ export default function ViewPratoId() {
                         Voltar
                      </Button>
                   </Link>
-                  <Button variant="contained" color="primary">
+                  <Button variant="contained" color="primary" onClick={addPrato}>
                      Adicionar
                   </Button>
                </Stack>

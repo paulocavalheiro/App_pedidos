@@ -10,21 +10,25 @@ import {
    Typography,
 } from '@mui/material'
 import { NextPage } from 'next'
-import styles from './../../styles/Prato_list.module.css'
+import styles from './../../styles/CreatePrato.module.css'
 import { useFormik } from 'formik'
 import React, { useEffect, useState } from 'react'
 import * as yup from 'yup'
 import { AccessTimeFilled } from '@mui/icons-material'
-import { api } from '../../services/api'
 import { getCategoria } from './hooks/getCategoria'
 import { useSnackBar } from '../../hooks/setSnackMsg'
 import SnackBarAlert from '../../mui_component/SnackBarAlert'
 import postPrato from './hooks/postPrato'
+import styled from '@emotion/styled'
 
 const validationSchema = yup.object({
    nome: yup.string().required('Campo obrigatório'),
    descricao: yup.string().required('Campo obrigatório'),
-   preco: yup.number().required('Campo obrigatório'),
+   preco: yup
+      .number()
+      .required('Campo obrigatório')
+      .positive('Tempo de preparo deve ser maior que zero')
+      .nullable(),
    tempoPreparo: yup
       .number()
       .required('Campo obrigatório')
@@ -33,9 +37,9 @@ const validationSchema = yup.object({
 })
 
 const PratoCreate: NextPage = () => {
-   const { data: dataCategoria, statusQuery: statusQueryCategoria } = getCategoria()  
-   const createPrato = postPrato 
    const [snackMessage, setSnackMessage] = useSnackBar()
+   const { data: dataCategoria, statusQuery: statusQueryCategoria } = getCategoria()  
+   const createPrato = postPrato  
    
    useEffect(() => {
       if (statusQueryCategoria === 'error') {
@@ -57,8 +61,12 @@ const PratoCreate: NextPage = () => {
          status: true,
       },
       validationSchema: validationSchema,
-      onSubmit: async (values, { resetForm }) => {
+      onSubmit: async (values, { resetForm }) => { 
          if (values) {
+            if(values.categoria == ''){
+               formPrato.setFieldError('categoria', 'Campo obrigatório')
+               return false
+            }
             const responsePost = await createPrato(values)
             responsePost.status === 201 ? resetForm() : ''
             setSnackMessage({
@@ -71,22 +79,20 @@ const PratoCreate: NextPage = () => {
                msg: 'Erro, não foi possivel cadastrar o prato',
                type: 'error',
             })
-            
-            
          }
-         
       },
    })
 
    return (
       <>
-         <Box className={styles.prato_container}>
+         <Box className={styles.pratoContainer}>
             <form onSubmit={formPrato.handleSubmit}>
                <Grid container spacing={1}>
                   <Grid item xs={12}>
-                     <Typography variant="h6">Cadastro de Prato</Typography>
-                     <TextField
-                        name="nome"
+                     <Typography variant="h6" color={'#fff'}>Cadastro de Prato</Typography>
+                     <WhiteBorderTextField
+                        {...formPrato.getFieldProps('nome')}
+                        inputProps={{ style: { fontFamily: 'nunito', color: 'white' } }}
                         label="Nome"
                         fullWidth
                         value={formPrato.values.nome}
@@ -102,8 +108,8 @@ const PratoCreate: NextPage = () => {
                      />
                   </Grid>
                   <Grid item xs={12}>
-                     <TextField
-                        name="descricao"
+                     <WhiteBorderTextField
+                        {...formPrato.getFieldProps('descricao')}
                         label="Descrição"
                         fullWidth
                         multiline
@@ -122,8 +128,8 @@ const PratoCreate: NextPage = () => {
                      />
                   </Grid>
                   <Grid item xs={6}>
-                     <TextField
-                        name="preco"
+                     <WhiteBorderTextField
+                        {...formPrato.getFieldProps('preco')}
                         label="Preço"
                         fullWidth
                         type="number"
@@ -147,9 +153,9 @@ const PratoCreate: NextPage = () => {
                      />
                   </Grid>
                   <Grid item xs={6}>
-                     <TextField
-                        name="tempoPreparo"
-                        label="Tempo de Preparo"
+                     <WhiteBorderTextField
+                        {...formPrato.getFieldProps('tempoPreparo')}
+                        label="Tempo de Preparo(min)"
                         fullWidth
                         type="number"
                         InputProps={{
@@ -188,14 +194,26 @@ const PratoCreate: NextPage = () => {
                            formPrato.setFieldValue('categoria', newValue || '')
                         }}
                         renderInput={(params) => (
-                           <TextField {...params} label="Categoria" />
+                           <WhiteBorderTextField
+                              {...params}
+                              label="Categoria"
+                              error={
+                                 formPrato.touched.categoria &&
+                                 Boolean(formPrato.errors.categoria)
+                              }
+                              helperText={
+                                 formPrato.touched.categoria &&
+                                 formPrato.errors.categoria
+                              }
+                           />
                         )}
                      />
                   </Grid>
                   <Grid item xs={6}>
-                     <FormControlLabel
+                     <FormControlLabel                        
                         control={
                            <Switch
+                              color='default'
                               checked={formPrato.values.status}
                               onChange={formPrato.handleChange}
                               name="status"
@@ -221,3 +239,14 @@ const PratoCreate: NextPage = () => {
    )
 }
 export default PratoCreate
+
+const WhiteBorderTextField = styled(TextField)`
+   & label {
+      color: white;
+   }
+   & .MuiOutlinedInput-root {
+      & fieldset {
+         border-color: white;
+      }
+   }
+`
