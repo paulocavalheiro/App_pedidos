@@ -92,7 +92,7 @@ const PratoCreate: NextPage = () => {
                      <Typography variant="h6" color={'#fff'}>Cadastro de Prato</Typography>
                      <WhiteBorderTextField
                         {...formPrato.getFieldProps('nome')}
-                        inputProps={{ style: { fontFamily: 'nunito', color: 'white' } }}
+                        inputProps={{ style: { color: 'white' } }}
                         label="Nome"
                         fullWidth
                         value={formPrato.values.nome}
@@ -110,6 +110,7 @@ const PratoCreate: NextPage = () => {
                   <Grid item xs={12}>
                      <WhiteBorderTextField
                         {...formPrato.getFieldProps('descricao')}
+                        inputProps={{ style: { color: 'white' } }}
                         label="Descrição"
                         fullWidth
                         multiline
@@ -130,6 +131,7 @@ const PratoCreate: NextPage = () => {
                   <Grid item xs={6}>
                      <WhiteBorderTextField
                         {...formPrato.getFieldProps('preco')}
+                        inputProps={{ style: { color: 'white' } }}
                         label="Preço"
                         fullWidth
                         type="number"
@@ -155,6 +157,7 @@ const PratoCreate: NextPage = () => {
                   <Grid item xs={6}>
                      <WhiteBorderTextField
                         {...formPrato.getFieldProps('tempoPreparo')}
+                        inputProps={{ style: { color: 'white' } }}
                         label="Tempo de Preparo(min)"
                         fullWidth
                         type="number"
@@ -197,6 +200,11 @@ const PratoCreate: NextPage = () => {
                            <WhiteBorderTextField
                               {...params}
                               label="Categoria"
+                              sx={{
+                                 '& .MuiInputBase-input': {
+                                    color: 'white',
+                                 },
+                              }}
                               error={
                                  formPrato.touched.categoria &&
                                  Boolean(formPrato.errors.categoria)
@@ -247,6 +255,11 @@ const WhiteBorderTextField = styled(TextField)`
    & .MuiOutlinedInput-root {
       & fieldset {
          border-color: white;
+      }
+   }
+   & .MuiOutlinedInput-root {
+      &.Mui-focused fieldset {
+        border-color: 'primary.main';
       }
    }
 `

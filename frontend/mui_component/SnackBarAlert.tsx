@@ -49,7 +49,7 @@ export default function SnackBarAlert(props: {
       <Stack spacing={2} sx={{ width: '100%' }}>
          <Snackbar
             open={props.params.show}
-            autoHideDuration={8000}
+            autoHideDuration={6000}
             onClose={handleClose}
          >
             <Alert

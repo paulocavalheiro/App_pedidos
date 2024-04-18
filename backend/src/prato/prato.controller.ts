@@ -17,6 +17,12 @@ export class PratoController {
         return this.pratoService.findPrato(id)
     }
 
+    @Get('buscarIds/:ids')
+    async getPratosIds(@Param('ids') ids: string){
+        const arrIds: number[] = ids.split(',').map(id => parseInt(id));
+        return this.pratoService.findPratoArray(arrIds)
+    }
+
     @Post()
     @UsePipes(new ValidationPipe())
     async createPrato(@Body() pratoDTO: PratoDTO) {

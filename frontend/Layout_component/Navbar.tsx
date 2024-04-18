@@ -15,6 +15,9 @@ export default function Navbar() {
             </Box>
             <ul className={styles.link_items}>
                <li>
+                  <Link href="/">Início</Link>
+               </li>
+               <li>
                   <Link href="/prato/">Ver cardápio</Link>
                </li>
                <li>

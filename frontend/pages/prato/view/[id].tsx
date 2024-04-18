@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import styles from '../../../styles/Viewprato.module.css'
 import {
    Box,
@@ -6,7 +6,6 @@ import {
    Chip,
    CircularProgress,
    Divider,
-   Icon,
    Stack,
    Typography,
 } from '@mui/material'
@@ -16,21 +15,23 @@ import AvTimerIcon from '@mui/icons-material/AvTimer'
 import SnackBarAlert, { SnackType } from '../../../mui_component/SnackBarAlert'
 import { getPrato } from '../hooks/getPrato'
 import { useSnackBar } from '../../../hooks/setSnackMsg'
-import postPedido from '../hooks/postPedido'
+import useAddItemPedido from '../hooks/addItemPedido'
 
-type GenericDataType = {
-   [key: string]: any
-}
 
 export default function ViewPratoId() {
    const { data, statusQuery } = getPrato()
-   const usePostPedido = postPedido
+   const { status:statusAddItem, addItemPedido } = useAddItemPedido()
    const [snackMessage, setSnackMessage] = useSnackBar()
+   const [loadingBtn, setLoadingBtn] = useState(false)
 
-   const addPrato = () => {
-      usePostPedido(data)
+   const addPrato = async () => {
+      await addItemPedido(data)
+      setLoadingBtn(true)
+      setTimeout(() => {
+         setLoadingBtn(false)
+      },4000)
    }
-
+   
    useEffect(() => {
       if (statusQuery === 'error') {
          setSnackMessage({
@@ -39,7 +40,19 @@ export default function ViewPratoId() {
             type: 'error',
          })
       }
-   }, [statusQuery])
+      if(statusAddItem){
+         setSnackMessage({
+            show: statusAddItem ? true : false,
+            msg:
+               statusAddItem === 'exists'
+                  ? 'Item já adicionado'
+                  : statusAddItem === 'success'
+                  ? 'Item adicionado'
+                  : '',
+            type: statusAddItem === 'exists' ? 'warning' : 'success',
+         })
+      }      
+   }, [statusQuery,statusAddItem])
 
    return (
       <>
@@ -103,9 +116,15 @@ export default function ViewPratoId() {
                         Voltar
                      </Button>
                   </Link>
-                  <Button variant="contained" color="primary" onClick={addPrato}>
-                     Adicionar
+                  <Button variant="contained" color="primary" onClick={addPrato} disabled={loadingBtn}>
+                     {loadingBtn ? <CircularProgress color="secondary" size={'15px'} /> : ''} 
+                     {loadingBtn ? 'Adicionando...' : 'Adicionar'}
                   </Button>
+                  <Link href="../../pedidos" passHref>
+                     <Button variant="contained" color="warning">
+                        Ver Pedido
+                     </Button>
+                  </Link>
                </Stack>
             </Box>
          </Box>
@@ -116,3 +135,5 @@ export default function ViewPratoId() {
       </>
    )
 }
+
+
