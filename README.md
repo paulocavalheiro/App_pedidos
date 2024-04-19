@@ -1,7 +1,11 @@
 # app_pedidos
 app cardapio e pedidos
 
-Backend nestjs : npm rum start:dev
-Frontend next 14 : npm run dev
+# backend
+Nestjs : npm rum start:dev
 
-database : postgres, o arquivo der se encontra na raiz do projeto
+# Frontend 
+NextJs 14 : npm run dev
+
+# database 
+Postgres, o arquivo der se encontra na raiz do projeto, crie o database e as tabelas com o arquivo restaurante.sql
