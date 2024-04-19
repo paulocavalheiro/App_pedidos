@@ -11,35 +11,18 @@ import {
 } from '@mui/material'
 import { NextPage } from 'next'
 import styles from './../../styles/CreatePrato.module.css'
-import { useFormik } from 'formik'
-import React, { useEffect, useState } from 'react'
-import * as yup from 'yup'
+import React, { useEffect } from 'react'
 import { AccessTimeFilled } from '@mui/icons-material'
-import { useGetCategoria } from './hooks/useGetCategoria'
 import { useSnackBar } from '../../hooks/setSnackMsg'
 import SnackBarAlert from '../../mui_component/SnackBarAlert'
-import usePostPrato from './hooks/usePostPrato'
 import styled from '@emotion/styled'
-
-const validationSchema = yup.object({
-   nome: yup.string().required('Campo obrigatório'),
-   descricao: yup.string().required('Campo obrigatório'),
-   preco: yup
-      .number()
-      .required('Campo obrigatório')
-      .positive('Tempo de preparo deve ser maior que zero')
-      .nullable(),
-   tempoPreparo: yup
-      .number()
-      .required('Campo obrigatório')
-      .positive('Tempo de preparo deve ser maior que zero')
-      .nullable(),
-})
+import { useGetCategoria } from './services/useGetCategoria'
+import useFormPrato from './hooks/useFormPrato'
 
 const PratoCreate: NextPage = () => {
    const [snackMessage, setSnackMessage] = useSnackBar()
    const { data: dataCategoria, statusQuery: statusQueryCategoria } = useGetCategoria()  
-   const createPrato = usePostPrato  
+   const { formPrato, transaction } = useFormPrato()
    
    useEffect(() => {
       if (statusQueryCategoria === 'error') {
@@ -49,40 +32,23 @@ const PratoCreate: NextPage = () => {
             type: 'error',
          })
       }
-   }, [statusQueryCategoria])
-
-   const formPrato = useFormik({
-      initialValues: {
-         nome: '',
-         categoria: '',
-         descricao: '',
-         preco: '',
-         tempoPreparo: '',
-         status: true,
-      },
-      validationSchema: validationSchema,
-      onSubmit: async (values, { resetForm }) => { 
-         if (values) {
-            if(values.categoria == ''){
-               formPrato.setFieldError('categoria', 'Campo obrigatório')
-               return false
-            }
-            const responsePost = await createPrato(values)
-            responsePost.status === 201 ? resetForm() : ''
-            setSnackMessage({
-               show: responsePost.status === 201,
-               msg: 'Sucesso, prato cadastrado',
-               type: 'success',
-            })
-            setSnackMessage({
-               show: responsePost.response.status === 400,
-               msg: 'Erro, não foi possivel cadastrar o prato',
-               type: 'error',
-            })
-         }
-      },
-   })
-
+      if (transaction === 'success') {
+         setSnackMessage({
+            show: true,
+            msg: 'Sucesso, prato cadastrado',
+            type: 'success',
+         })         
+      }
+      if (transaction === 'error') {
+         setSnackMessage({
+            show: true,
+            msg: 'Aviso, não foi possivel cadastrar a mesa',
+            type: 'error',
+         })
+      }
+   }, [statusQueryCategoria, transaction])
+   
+   
    return (
       <>
          <Box className={styles.pratoContainer}>

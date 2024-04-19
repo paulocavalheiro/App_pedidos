@@ -4,8 +4,8 @@ import Card from '../../Layout_component/Card'
 import { useEffect } from 'react'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import SnackBarAlert from '../../mui_component/SnackBarAlert'
-import { useGetCardapio } from './hooks/useGetCardapio'
 import { useSnackBar } from '../../hooks/setSnackMsg'
+import { useGetCardapio } from './services/useGetCardapio'
 
 const PratoList: NextPage = () => {
    const { data, statusQuery } = useGetCardapio()
