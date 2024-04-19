@@ -1,7 +1,7 @@
 import { api } from '../../../services/api'
 import { GenericDataType } from '../../../services/types'
 
-const postPrato = async (children: GenericDataType): Promise<any> => {
+const usePostPrato = async (children: GenericDataType): Promise<any> => {
    const postdata = {
       nome: children?.nome,
       descricao: children?.descricao,
@@ -22,4 +22,4 @@ const postPrato = async (children: GenericDataType): Promise<any> => {
       })
    return responseData
 }
-export default postPrato
+export default usePostPrato

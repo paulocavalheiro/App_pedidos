@@ -9,13 +9,11 @@ export class CategoriaController {
 
     @Get('listar')
     async getCategorias(): Promise<Categoria[]> {   
-         console.log('listar')    
         return this.categoriaService.findAll()
     }
 
     @Get(':id')
     async getCategoria(@Param('id') id: string): Promise<Categoria> {   
-        console.log('buscar')      
         return this.categoriaService.findOne(+id)
     }
 

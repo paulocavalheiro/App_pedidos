@@ -20,11 +20,17 @@ export default function Navbar() {
                <li>
                   <Link href="/prato/">Ver cardápio</Link>
                </li>
+               
                <li>
-                  <Link href="/prato/create">Cadastrar cardápio</Link>
+                  <Link href="/pedidos/listPedidos">Meu Pedidos</Link>
                </li>
                <li>
-                  <Link href="/#">Pedidos</Link>
+                  |
+               </li>
+               <li>                  
+                  <Link href="/prato/create">
+                     Cadastrar cardápio
+                  </Link>
                </li>
             </ul>
          </Box>

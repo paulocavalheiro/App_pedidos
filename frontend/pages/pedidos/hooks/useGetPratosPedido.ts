@@ -32,6 +32,7 @@ const useGetPRatosPedido = () => {
    async function getPratos() {
       try {
          const arrPratos = JSON.parse(localStorage.getItem('pratos') || '[]')
+         if(arrPratos.length === 0) return null
          const { data } = await api.get(`api/prato/buscarIds/${arrPratos}`)
          return data
       } catch (error) {

@@ -1,8 +1,5 @@
 import { useState } from 'react'
 import { GenericDataType, StatusQueryProps } from '../../../services/types'
-import { useQuery } from 'react-query'
-import { api } from '../../../services/api'
-
 
 type StatusProps = 'error' | 'success' | 'exists' | null
 

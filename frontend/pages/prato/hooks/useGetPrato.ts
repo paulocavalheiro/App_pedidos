@@ -7,7 +7,7 @@ import { useQuery } from 'react-query'
  * retorna visualização do prato
  * @returns {pratoView: GenericDataType, transactionApi: TransactionApiType}
  */
-export const getPrato = (): GenericDataType => {
+export const useGetPrato = (): GenericDataType => {
    let statusQuery: StatusQueryProps['status'] = null;
    const router = useRouter()
    const { id } = router.query

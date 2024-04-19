@@ -44,9 +44,9 @@ export class PratoService {
                 relations: ['categoria'],
                 where: {
                     status: true,
+                    id: id
                 },
             })
-
             if (!prato) {
                 throw new NotFoundException('Nenhum prato cadastrado')
             } else {

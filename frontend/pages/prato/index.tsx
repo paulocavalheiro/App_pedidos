@@ -4,11 +4,11 @@ import Card from '../../Layout_component/Card'
 import { useEffect } from 'react'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import SnackBarAlert from '../../mui_component/SnackBarAlert'
-import { getCardapio } from './hooks/getCardapio'
+import { useGetCardapio } from './hooks/useGetCardapio'
 import { useSnackBar } from '../../hooks/setSnackMsg'
 
 const PratoList: NextPage = () => {
-   const { data, statusQuery } = getCardapio()
+   const { data, statusQuery } = useGetCardapio()
    const [snackMessage, setSnackMessage] = useSnackBar()
    
    useEffect(() => {

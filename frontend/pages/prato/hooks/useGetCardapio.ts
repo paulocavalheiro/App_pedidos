@@ -1,17 +1,20 @@
-import { useQuery } from 'react-query'
 import { GenericDataType, StatusQueryProps } from '../../../services/types'
 import { api } from '../../../services/api'
+import { useQuery } from 'react-query'
 
-export const getCategoria = () => {
-   let statusQuery: StatusQueryProps['status'] = null
+/**
+ * retorna lista de pratos
+ * @returns {cardapio: GenericDataType, transactionApi: TransactionApiType}
+ */
+export const useGetCardapio = (): GenericDataType => {
+   let statusQuery: StatusQueryProps['status'] = null;
 
    const { isLoading, data, error } = useQuery<GenericDataType>({
-      queryKey: ['categoria'],
-      queryFn: getCategoria,
+      queryKey: ['cardapio'],
+      queryFn: getCardapio,
       refetchOnWindowFocus: false,
-      staleTime: 1000 * 60 * 5,
    })
-
+   
    if (isLoading) {
       statusQuery = 'loading'
       return { data: null, statusQuery }
@@ -24,16 +27,15 @@ export const getCategoria = () => {
 
    if (data) {
       return data && data.length > 0
-         ? { data, statusQuery: (statusQuery = 'success') }
-         : { data: null, statusQuery: (statusQuery = 'error') }
+         ? { data, statusQuery: statusQuery = 'success' }
+         : { data: null, statusQuery: statusQuery = 'error' }
    } else {
       statusQuery = null
       return { data: null, statusQuery }
    }
-
-   async function getCategoria() {
+   async function getCardapio() {
       try {
-         const { data } = await api.get('api/categoria/listar')
+         const { data } = await api.get('api/prato/listar')
          return data
       } catch (error) {
          return error

@@ -13,13 +13,13 @@ import Link from 'next/link'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import AvTimerIcon from '@mui/icons-material/AvTimer'
 import SnackBarAlert, { SnackType } from '../../../mui_component/SnackBarAlert'
-import { getPrato } from '../hooks/getPrato'
+import { useGetPrato } from '../hooks/useGetPrato'
 import { useSnackBar } from '../../../hooks/setSnackMsg'
-import useAddItemPedido from '../hooks/addItemPedido'
+import useAddItemPedido from '../hooks/useAddItemPedido'
 
 
 export default function ViewPratoId() {
-   const { data, statusQuery } = getPrato()
+   const { data, statusQuery } = useGetPrato()
    const { status:statusAddItem, addItemPedido } = useAddItemPedido()
    const [snackMessage, setSnackMessage] = useSnackBar()
    const [loadingBtn, setLoadingBtn] = useState(false)
@@ -45,7 +45,7 @@ export default function ViewPratoId() {
             show: statusAddItem ? true : false,
             msg:
                statusAddItem === 'exists'
-                  ? 'Item já adicionado'
+                  ? 'Item está adicionado'
                   : statusAddItem === 'success'
                   ? 'Item adicionado'
                   : '',

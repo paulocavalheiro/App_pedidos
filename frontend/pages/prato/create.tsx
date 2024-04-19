@@ -15,10 +15,10 @@ import { useFormik } from 'formik'
 import React, { useEffect, useState } from 'react'
 import * as yup from 'yup'
 import { AccessTimeFilled } from '@mui/icons-material'
-import { getCategoria } from './hooks/getCategoria'
+import { useGetCategoria } from './hooks/useGetCategoria'
 import { useSnackBar } from '../../hooks/setSnackMsg'
 import SnackBarAlert from '../../mui_component/SnackBarAlert'
-import postPrato from './hooks/postPrato'
+import usePostPrato from './hooks/usePostPrato'
 import styled from '@emotion/styled'
 
 const validationSchema = yup.object({
@@ -38,8 +38,8 @@ const validationSchema = yup.object({
 
 const PratoCreate: NextPage = () => {
    const [snackMessage, setSnackMessage] = useSnackBar()
-   const { data: dataCategoria, statusQuery: statusQueryCategoria } = getCategoria()  
-   const createPrato = postPrato  
+   const { data: dataCategoria, statusQuery: statusQueryCategoria } = useGetCategoria()  
+   const createPrato = usePostPrato  
    
    useEffect(() => {
       if (statusQueryCategoria === 'error') {
