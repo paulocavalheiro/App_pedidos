@@ -14,7 +14,7 @@ import { ItemPedidoModule } from './item_pedido/item_pedido.module';
     }),
     TypeOrmModule.forRoot({
         type: 'postgres',
-        host: 'localhost',
+        host: 'db', // alterar para localhost(sem docker)
         port: parseInt(process.env.DB_PORT, 10) || 5432,
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,

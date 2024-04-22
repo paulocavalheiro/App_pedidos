@@ -1,5 +1,5 @@
 #Use a imagem oficial do Node.js
-FROM node:latest
+FROM node:20
 
 WORKDIR /app
 
