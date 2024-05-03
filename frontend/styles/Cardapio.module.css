@@ -5,6 +5,23 @@
    margin-bottom: 2em;
 }
 
+.idCard {
+   margin: 1em 0;
+   background-color: #e33d33;
+   border-radius: 5px;
+   padding: 5px;
+   color: #fff;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.textCard {
+   text-transform: capitalize;
+   margin-bottom: 1em;
+   font-size: 1.4em;
+}
+
 .title {
    color: #e33d33;
    text-align: center;

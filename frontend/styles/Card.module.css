@@ -13,23 +13,6 @@
    color: #fff;
 }
 
-.card .id {
-   margin: 1em 0;
-   background-color: #e33d33;
-   border-radius: 5px;
-   padding: 5px;
-   color: #fff;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-}
-
-.card .title {
-   text-transform: capitalize;
-   margin-bottom: 1em;
-   font-size: 1.4em;
-}
-
 .card .btn {
    text-decoration: none;
    background-color: #fff;

@@ -2,10 +2,11 @@ import type { NextPage } from 'next'
 import styles from '../../styles/Cardapio.module.css'
 import Card from '../../Layout_component/Card'
 import { useEffect } from 'react'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Typography } from '@mui/material'
 import SnackBarAlert from '../../mui_component/SnackBarAlert'
 import { useSnackBar } from '../../hooks/setSnackMsg'
 import { useGetCardapio } from './services/useGetCardapio'
+import Link from 'next/link'
 
 const PratoList: NextPage = () => {
    const { data, statusQuery } = useGetCardapio()
@@ -44,7 +45,16 @@ const PratoList: NextPage = () => {
                data.length > 0 &&
                statusQuery === 'success' &&
                data.map((item: any, index: number) => (
-                  <Card key={index} prato={item} />
+                  <Card key={index}  >
+                     <p className={styles.idCard}>#{item.id}</p>
+                     <h3 className={styles.textCard}>{item.nome}</h3>
+                     <h3 className={styles.textCard}>R${item.preco}</h3>
+                     <Link href={`prato/view/${item.id}`}>
+                        <Button variant="contained" color="error">
+                           Visualizar
+                        </Button>
+                     </Link>
+                  </Card>
                ))}
          </Box>
          <SnackBarAlert

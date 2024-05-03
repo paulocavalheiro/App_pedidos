@@ -1,7 +1,7 @@
 import { Box, Button } from '@mui/material'
 import styles from '../styles/Card.module.css'
 import Link from 'next/link'
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 export interface Prato {
    id: number
@@ -12,18 +12,11 @@ export interface Prato {
    tempoPreparo: number
 }
 
-export default function Card({ prato }: { prato: Prato }) {
+export default function Card({children}:{children: ReactNode} ) {
    return (
       <>
          <Box className={styles.card}>
-            <p className={styles.id}>#{prato.id}</p>
-            <h3 className={styles.title}>{prato.nome}</h3>
-            <h3 className={styles.title}>R${prato.preco}</h3>
-            <Link href={`prato/view/${prato.id}`}>
-               <Button variant="contained" color="error">
-                  Visualizar
-               </Button>
-            </Link>
+            {children}
          </Box>
       </>
    )
