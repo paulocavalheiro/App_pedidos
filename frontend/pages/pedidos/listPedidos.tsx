@@ -14,8 +14,7 @@ const ListPedido: NextPage = () => {
             <Box sx={{ pt: '24px' }}>
                {dataPedido &&
                   dataPedido.map((item: any) => (
-                     <Box key={item.id} className={styles.pedidoCard}>
-                        
+                     <Box key={item.numero_mesa} className={styles.pedidoCard}>                        
                         <Chip
                            label={item.numero_mesa}
                            color="primary"
@@ -34,8 +33,8 @@ const ListPedido: NextPage = () => {
                            Previsão:{item.hora_estimada_pedido}
                         </Typography>
                         <Box className={styles.pedidoItens}>
-                           {item.itens_pedido?.map((item: any) => (
-                              <>
+                           {item.itens_pedido?.map((item: any, index:number) => (
+                              <Box key={index}>
                                  <Typography variant="body1">
                                  {item.nome}
                                  </Typography>
@@ -47,7 +46,7 @@ const ListPedido: NextPage = () => {
                                     : {item.preco}
                                  </Typography>
                                  <Divider />
-                              </>
+                              </Box>
                            ))}
                         </Box>
                      </Box>
