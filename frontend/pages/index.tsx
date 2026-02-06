@@ -57,7 +57,7 @@ const Home: NextPage = () => {
                <Box className={'statusQuery'}>
                   <CircularProgress color="secondary" />
                   <Typography variant="h6" sx={{ pl: '10px' }}>
-                     Carregando...
+                     Carregando... pedido
                   </Typography>
                </Box>
             ) : (
