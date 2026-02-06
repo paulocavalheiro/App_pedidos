@@ -1,0 +1,55 @@
+---
+title: "Frontend"
+description: "Interface Next.js do App Pedidos"
+---
+
+## Visão geral
+
+O frontend do App Pedidos é uma aplicação [Next.js](https://nextjs.org/) que consome a API do backend. As principais áreas da interface são:
+
+- **Home** — página inicial
+- **Pratos** — listagem, criação e visualização de pratos do cardápio
+- **Pedidos** — listagem e gestão de pedidos (criar, cancelar, ver itens)
+
+A UI utiliza componentes próprios em `Layout_component/` e MUI (Material-UI) onde aplicável.
+
+## Pré-requisitos
+
+- **Node.js** (versão compatível com Next.js)
+- **Backend rodando** — o frontend chama a API; garanta que o backend esteja ativo antes de usar a aplicação.
+
+## Instalação
+
+Na pasta `frontend` do projeto:
+
+```bash
+npm install
+# ou
+yarn
+```
+
+## Como rodar
+
+```bash
+npm run dev
+# ou
+yarn dev
+```
+
+Em seguida, abra [http://localhost:3000](http://localhost:3000) no navegador. A página é atualizada automaticamente ao editar os arquivos.
+
+## Estrutura resumida
+
+- **pages/** — rotas da aplicação: `index.tsx` (home), `prato/` (cardápio e criação de prato), `pedidos/` (lista e gestão de pedidos)
+- **services/** — cliente HTTP (Axios) e tipos compartilhados
+- **Layout_component/** — Layout, Navbar, Footer, Card
+- **hooks/** e **pages/.../hooks/** — hooks React para formulários e chamadas à API
+- **styles/** — módulos CSS por página/componente
+
+## Configuração da API
+
+A URL base da API é definida em `frontend/services/api.tsx`. Por padrão o cliente Axios usa:
+
+- **baseURL:** `http://127.0.0.1:3000`
+
+Ajuste essa URL (ou use variáveis de ambiente) se o backend estiver em outra porta ou host. O frontend espera que a API do NestJS esteja acessível nesse endereço para listar categorias, pratos e gerenciar pedidos.

@@ -1,0 +1,73 @@
+---
+title: "Backend"
+description: "API NestJS do App Pedidos"
+---
+
+## Visão geral
+
+O backend do App Pedidos é uma API REST construída com [NestJS](https://nestjs.com/) em TypeScript. A aplicação está organizada em módulos que refletem o domínio do restaurante:
+
+- **categoria** — categorias de pratos (Sopas, Grelhados, Pizzas, etc.)
+- **prato** — cardápio com preço, descrição e tempo de preparo
+- **pedido** — pedidos com mesa, cliente e status
+- **item_pedido** — itens (pratos) vinculados a cada pedido
+
+## Pré-requisitos
+
+- **Node.js** (versão compatível com NestJS)
+- **Docker** (para subir o banco com `docker-compose`)
+- **PostgreSQL** — o projeto usa o banco `restaurante_1` (conforme configuração no repositório)
+
+## Instalação
+
+Na pasta `backend` do projeto:
+
+```bash
+npm install
+```
+
+## Como rodar
+
+```bash
+# desenvolvimento
+npm run start
+
+# modo watch (recompila ao alterar arquivos)
+npm run start:dev
+
+# produção
+npm run start:prod
+```
+
+## Banco de dados
+
+Com o Docker em execução, acesse o PostgreSQL:
+
+```bash
+docker exec -it db psql -U postgres -d restaurante_1
+```
+
+Crie as tabelas executando o script `restaurante.sql` (na raiz do projeto). Ele define as tabelas `categoria`, `prato`, `pedido` e `item_pedido`.
+
+Depois, insira as categorias iniciais:
+
+```sql
+INSERT INTO categoria (nome, status, icone) VALUES ('Sopas', true, 'RamenDiningIcon');
+INSERT INTO categoria (nome, status, icone) VALUES ('Grelhados', true, 'SetMealIcon');
+INSERT INTO categoria (nome, status, icone) VALUES ('Pratos caseiros', true, 'CabinIcon');
+INSERT INTO categoria (nome, status, icone) VALUES ('Pizzas', true, 'LocalPizzaIcon');
+INSERT INTO categoria (nome, status, icone) VALUES ('Sobremesas', true, 'IcecreamIcon');
+```
+
+## Testar a API
+
+Na raiz do projeto há a collection do Postman: `backendRestaurante.postman_collection.json`. Importe-a no Postman para testar os endpoints da API (GET, POST, etc.) sem precisar usar o frontend.
+
+<CardGroup cols={2}>
+  <Card title="Front-end" icon="desktop" href="/front-end">
+    Veja como configurar a interface.
+  </Card>
+  <Card title="Back-end" icon="server" href="/back-end">
+    Acesse os endpoints da API.
+  </Card>
+</CardGroup>
