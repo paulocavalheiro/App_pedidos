@@ -1,0 +1,136 @@
+---
+title: "Cadastro de pedido"
+description: "Tela Meu Pedido: funções, usabilidade e integração com a API"
+---
+
+## Objetivo da tela
+
+A tela **Meu Pedido** (cadastro de pedido) permite ao cliente revisar os pratos escolhidos no cardápio, ver nome e mesa identificados, e **confirmar** ou **cancelar** o pedido. Após confirmar, os dados são enviados à API e o pedido é registrado no backend.
+
+## Rota e acesso
+
+- **Rota:** `/pedidos`
+- **Componente:** `frontend/pages/pedidos/index.tsx`
+- **Estilo:** `frontend/styles/pedidos/MeuPedido.module.css`
+
+O usuário chega a essa tela após se identificar (nome, CPF, mesa) na home e adicionar itens no cardápio (`/prato`). Os itens ficam armazenados temporariamente no `localStorage` até a confirmação.
+
+---
+
+## Fluxo do usuário
+
+1. **Identificação** — Na home, o cliente informa nome, CPF e número da mesa (armazenados em `localStorage` como `user`).
+2. **Cardápio** — Em `/prato`, o cliente escolhe pratos; cada "adicionar" grava o ID do prato em `localStorage` (`pratos`).
+3. **Meu Pedido** — Em `/pedidos`, a tela carrega os dados do usuário e os pratos (IDs do `localStorage` + detalhes via API), exibe a lista e os botões de ação.
+4. **Ação** — O cliente pode **Pedir** (envia o pedido à API), **Cancelar** (limpa dados e volta à home) ou **Cardapio** (volta para `/prato` para incluir mais itens).
+
+---
+
+## Funções e hooks
+
+### useGetUser
+
+- **Arquivo:** `frontend/pages/prato/hooks/getUser.ts`
+- **Função:** Lê do `localStorage` o objeto `user` (nome, cpf, mesa) preenchido na tela inicial.
+- **Uso na tela:** Exibe "Nome #Mesa" no cabeçalho e envia esses dados no payload ao confirmar o pedido.
+
+### useGetPratosPedido (useGetPRatosPedido)
+
+- **Arquivo:** `frontend/pages/pedidos/hooks/useGetPratosPedido.ts`
+- **Função:** Obtém a lista de pratos do pedido atual.
+  - Lê do `localStorage` o array `pratos` (IDs).
+  - Se houver IDs, chama a API `GET api/prato/buscarIds/:ids` para buscar nome, categoria, preço e tempo de preparo de cada prato.
+- **Retorno:** `data` (lista de pratos), `statusQuery` (loading | success | error).
+- **Uso na tela:** Renderiza a lista de itens (número/id, nome, categoria, preço, tempo em minutos). Se não houver itens, exibe "Pedido sem itens" e botão para ir ao Cardápio.
+
+### usePostPedido
+
+- **Arquivo:** `frontend/pages/pedidos/hooks/usePostPedido.ts`
+- **Função:** Monta o payload do pedido e chama o serviço de criação.
+  - Usa `useGetUser()` para nome, CPF e mesa.
+  - Recebe os itens (dataPedido) e extrai apenas os `id` dos pratos.
+  - Chama `useCreatePedido` com `getUser` e `idsItens`.
+- **Uso na tela:** O botão **Pedir** chama `postPedido({ dataPedido })`. O resultado (status HTTP) é tratado em `useEffect` para exibir Snackbar e mensagem de sucesso ou erro.
+
+### useCreatePedido
+
+- **Arquivo:** `frontend/pages/pedidos/services/useCreatePedido.ts`
+- **Função:** Envia o pedido para a API.
+  - Monta o body: `numero_mesa`, `cpf_cliente`, `nome_cliente`, `status: 'Preparando'`, `pratos: [{ id }, ...]`.
+  - Requisição: `POST api/pedido`.
+- **Retorno:** Objeto de resposta Axios (incluindo `status` 201 em sucesso). Em erro, retorna o objeto de erro para tratamento na tela.
+
+### useCancelPedido
+
+- **Arquivo:** `frontend/pages/pedidos/hooks/useCancelPedido.ts`
+- **Função:** Cancela o pedido em edição (não envia à API).
+  - Ativa estado `loading` ("Cancelando...").
+  - Após 2 segundos: `localStorage.clear()` e redireciona para `/` (home).
+- **Uso na tela:** Botão **Cancelar** chama `cancelPedido()`.
+
+---
+
+## Elementos da interface
+
+| Elemento | Descrição |
+|----------|-----------|
+| **Título** | "Meu Pedido" |
+| **Subtítulo** | Nome do cliente e número da mesa (ex.: "João #5") |
+| **Lista de itens** | Para cada prato: número (id), nome, categoria (ícone + nome), preço (ícone), tempo de preparo em minutos (ícone). Separadores entre itens. |
+| **Botão Cancelar** | Vermelho; limpa dados e volta à home. |
+| **Botão Cardapio** | Amarelo; navega para `/prato`. |
+| **Botão Pedir** | Azul (primary); envia o pedido à API. |
+| **Pedido sem itens** | Quando não há pratos: mensagem "Pedido sem itens" e botão para ir ao Cardápio. |
+| **Status pós-envio** | Após clicar em Pedir: mensagem "Tudo certo seu pedido foi confirmado" ou "Ouve um erro ao processar seu pedido". Em sucesso, o `localStorage` é limpo. |
+| **SnackBarAlert** | Exibe notificações: erro ao buscar dados do pedido, "Pedido registrado" (sucesso) ou "Erro, não foi possivel registrar o pedido" (erro). |
+
+---
+
+## Integração com o backend
+
+### Endpoints utilizados
+
+1. **GET `api/prato/buscarIds/:ids`**  
+   - Usado para obter os detalhes dos pratos do pedido (ids no `localStorage`).  
+   - Parâmetro: lista de IDs separados por vírgula.  
+   - Retorno: array de pratos com id, nome, categoria, preco, tempo_preparo, etc.
+
+2. **POST `api/pedido`**  
+   - Usado ao clicar em **Pedir**.  
+   - Body esperado (exemplo):
+
+```json
+{
+  "numero_mesa": 5,
+  "cpf_cliente": "12345678900",
+  "nome_cliente": "João",
+  "status": "Preparando",
+  "pratos": [{ "id": 1 }, { "id": 2 }]
+}
+```
+
+- Validação no backend: `numero_mesa` (número), `cpf_cliente`, `nome_cliente`, `status` (string), `pratos` (array de objetos com `id`).  
+- Resposta de sucesso: status 201 e corpo com `pedido` e `itensPedido`.
+
+### Comportamento após sucesso
+
+- Snackbar de sucesso: "Pedido registrado".
+- Estado da tela atualizado para exibir "Tudo certo seu pedido foi confirmado".
+- `localStorage` é limpo (incluindo `user` e `pratos`).
+
+---
+
+## Estados da tela
+
+- **Carregando itens** — Enquanto `useGetPratosPedido` busca os pratos (loading).
+- **Erro ao buscar itens** — `statusQuery === 'error'`: Snackbar "Erro, não foi possivel buscar os dados do pedido".
+- **Pedido vazio** — Sem itens: mensagem "Pedido sem itens" e link para Cardápio.
+- **Lista preenchida** — Exibe itens e os três botões (Cancelar, Cardapio, Pedir).
+- **Cancelando** — Após clicar em Cancelar: spinner e texto "Cancelando..." até redirecionar.
+- **Após enviar** — `statuspedido === true`: mensagem de confirmação; `statuspedido === false`: mensagem de erro. Snackbar reflete o resultado do POST.
+
+---
+
+## Resumo de usabilidade
+
+A tela centraliza a **revisão e a confirmação** do pedido: o usuário vê quem está pedindo (nome e mesa), todos os pratos com preço e tempo de preparo, e decide entre confirmar (Pedir), desistir (Cancelar) ou voltar ao cardápio (Cardapio). O feedback é dado por Snackbar e pela mensagem de status na própria tela, garantindo que o usuário saiba se o pedido foi registrado ou se ocorreu algum erro.
