@@ -47,9 +47,47 @@ Com o Docker em execução, acesse o PostgreSQL:
 docker exec -it db psql -U postgres -d restaurante_1
 ```
 
-Crie as tabelas executando o script `restaurante.sql` (na raiz do projeto). Ele define as tabelas `categoria`, `prato`, `pedido` e `item_pedido`.
+Crie as tabelas executando o script `restaurante.sql` (na raiz do projeto). Exemplo da estrutura:
 
-Depois, insira as categorias iniciais:
+```sql restaurante.sql
+-- Criar tabela categoria
+CREATE TABLE categoria (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    status BOOLEAN NOT NULL,
+    icone VARCHAR(255)
+);
+
+-- Criar tabela prato
+CREATE TABLE prato (
+    id SERIAL PRIMARY KEY,
+    categoria_id INTEGER REFERENCES categoria(id),
+    nome VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    preco NUMERIC(10, 2) NOT NULL,
+    tempo_preparo TIMESTAMP,
+    status BOOLEAN NOT NULL
+);
+
+-- Criar tabela pedido
+CREATE TABLE pedido (
+    id SERIAL PRIMARY KEY,
+    numero_mesa INTEGER,
+    cpf_cliente VARCHAR(14),
+    nome_cliente VARCHAR(255),
+    status VARCHAR(50) NOT NULL,
+    data_pedido TIMESTAMP NOT NULL
+);
+
+-- Criar tabela item_pedido
+CREATE TABLE item_pedido (
+    id SERIAL PRIMARY KEY,
+    pedido_id INTEGER REFERENCES pedido(id),
+    prato_id INTEGER REFERENCES prato(id)
+);
+```
+
+Em seguida, insira as categorias iniciais:
 
 ```sql
 INSERT INTO categoria (nome, status, icone) VALUES ('Sopas', true, 'RamenDiningIcon');
@@ -64,10 +102,14 @@ INSERT INTO categoria (nome, status, icone) VALUES ('Sobremesas', true, 'Icecrea
 Na raiz do projeto há a collection do Postman: `backendRestaurante.postman_collection.json`. Importe-a no Postman para testar os endpoints da API (GET, POST, etc.) sem precisar usar o frontend.
 
 <CardGroup cols={2}>
-  <Card title="Front-end" icon="desktop" href="/front-end">
+  <Card title="Frontend" icon="desktop" href="/front">
     Veja como configurar a interface.
   </Card>
-  <Card title="Back-end" icon="server" href="/back-end">
-    Acesse os endpoints da API.
+  <Card
+    title="Cadastro de pedido"
+    icon="clipboard-list"
+    href="/front/cadastro-pedido"
+  >
+    Documentação da tela Meu Pedido.
   </Card>
 </CardGroup>

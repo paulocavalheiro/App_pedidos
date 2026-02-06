@@ -1,12 +1,11 @@
 ---
-title: 'Development'
-description: 'Preview changes locally to update your docs'
+title: "Development"
+description: "Preview changes locally to update your docs"
 ---
 
 <Info>
-  **Prerequisites**:
-  - Node.js version 19 or higher
-  - A docs repository with a `docs.json` file
+  **Prerequisites**: - Node.js version 19 or higher - A docs repository with a
+  `docs.json` file
 </Info>
 
 Follow these steps to install and run Mintlify on your operating system.
@@ -17,13 +16,15 @@ Follow these steps to install and run Mintlify on your operating system.
 ```bash
 npm i -g mint
 ```
+
 </Step>
 
 <Step title="Preview locally">
 
-Navigate to your docs directory where your `docs.json` file is located, and run the following command:
+Navigate to your **docs directory** (the folder that contains `docs.json`). For this project, use the `docs` folder:
 
 ```bash
+cd docs
 mint dev
 ```
 
@@ -31,6 +32,12 @@ A local preview of your documentation will be available at `http://localhost:300
 
 </Step>
 </Steps>
+
+<Warning>
+  Run `mint dev` from inside the **docs** folder only. Running it from the
+  project root can cause "module is not defined" errors because Mintlify would
+  try to bundle backend and frontend code.
+</Warning>
 
 ## Custom ports
 
@@ -67,7 +74,11 @@ mint broken-links
 If the deployment is successful, you should see the following:
 
 <Frame>
-  <img src="/images/checks-passed.png" alt="Screenshot of a deployment confirmation message that says All checks have passed." style={{ borderRadius: '0.5rem' }} />
+  <img
+    src="/images/checks-passed.png"
+    alt="Screenshot of a deployment confirmation message that says All checks have passed."
+    style={{ borderRadius: "0.5rem" }}
+  />
 </Frame>
 
 ## Code formatting
@@ -83,11 +94,16 @@ We suggest using extensions on your IDE to recognize and format MDX. If you're a
     1. Remove the currently-installed version of the CLI: `npm remove -g mint`
     2. Upgrade to Node v19 or higher.
     3. Reinstall the CLI: `npm i -g mint`
+
   </Accordion>
 
-  <Accordion title="Issue: Encountering an unknown error">
-  
-    Solution: Go to the root of your device and delete the `~/.mintlify` folder. Then run `mint dev` again.
+<Accordion title="Issue: Encountering an unknown error">
+  Solution: Go to the root of your device and delete the `~/.mintlify` folder.
+  Then run `mint dev` again.
+</Accordion>
+
+  <Accordion title='Error: "module is not defined" or "exports is not defined" in browser'>
+    Run `mint dev` from inside the **docs** folder (`cd docs` then `mint dev`), not from the project root. The docs folder contains only documentation files; the project root has backend and frontend code that must not be bundled by Mintlify.
   </Accordion>
 </AccordionGroup>
 

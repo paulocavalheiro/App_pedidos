@@ -1,0 +1,17 @@
+# Evita que o Mintlify processe código do projeto (causa "module is not defined" no browser)
+backend/
+frontend/
+node_modules/
+.env
+.env.*
+docker-compose.yml
+*.sql
+package-lock.json
+*.postman_collection.json
+.git/
+
+# Imagens/arquivos que não fazem parte da doc
+cadastro_mesa.png
+cardapio.png
+der.png
+prato.png

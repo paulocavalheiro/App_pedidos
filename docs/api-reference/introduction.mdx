@@ -1,33 +1,40 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'Referência da API'
+description: 'Endpoints do backend NestJS do App Pedidos'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Visão geral
 
-## Welcome
-
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+A API do App Pedidos é uma API REST documentada com OpenAPI 3.1. Ela expõe recursos para **categorias**, **pratos** e **pedidos**, consumidos pelo frontend Next.js.
 
 <Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
+  title="Especificação OpenAPI"
+  icon="code"
+  href="/api-reference/openapi.json"
 >
-  View the OpenAPI specification file
+  Ver openapi.json da API
 </Card>
 
-## Authentication
+## Base URL
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+Em desenvolvimento, o backend roda em:
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
-```
+- **URL base:** `http://localhost:3000` (ou a porta configurada no NestJS)
+
+O frontend usa essa URL em `frontend/services/api.tsx` para todas as requisições (listar categorias, pratos, criar pedido, etc.).
+
+## Recursos
+
+| Recurso    | Prefixo             | Descrição                                      |
+| ---------- | ------------------- | ---------------------------------------------- |
+| Categoria  | `/api/categoria`    | Listar, buscar por ID e criar categorias      |
+| Prato      | `/api/prato`        | Listar, visualizar, buscar por IDs, criar e atualizar pratos |
+| Pedido     | `/api/pedido`       | Buscar por CPF, listar, criar e atualizar status |
+
+## Autenticação
+
+Atualmente a API não exige autenticação; os endpoints são abertos para uso em ambiente de desenvolvimento e no fluxo do restaurante (cliente faz pedido pelo frontend).
+
+## Testando a API
+
+Use a collection Postman na raiz do projeto: `backendRestaurante.postman_collection.json`. Importe no Postman para testar GET, POST e PUT sem usar o frontend.

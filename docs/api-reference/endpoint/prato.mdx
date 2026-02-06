@@ -1,0 +1,15 @@
+---
+title: 'Prato'
+description: 'Endpoints do cardápio (pratos)'
+openapi: 'GET /api/prato/buscarIds/{ids}'
+---
+
+Recursos para listar, visualizar, buscar por IDs, criar e atualizar pratos. O endpoint **buscarIds** é usado na tela **Meu Pedido** para carregar os itens do pedido a partir dos IDs armazenados no `localStorage`.
+
+## Outros endpoints
+
+- **GET /api/prato/listar** — Lista todos os pratos.
+- **GET /api/prato/visualizar/:id** — Visualiza um prato pelo ID.
+- **POST /api/prato** — Cria prato. Body: nome, descricao, preco, tempo_preparo, status, categoria.
+- **PUT /api/prato/:id** — Atualiza prato.
+- **PUT /api/prato/updateStatus/:id** — Atualiza o status do prato.

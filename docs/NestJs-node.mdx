@@ -1,0 +1,56 @@
+---
+title: "NestJS + Node (Backend)"
+description: "Tecnologias e stack do backend do App Pedidos"
+---
+
+## Stack tecnológica
+
+O backend do App Pedidos é uma API REST construída com [NestJS](https://nestjs.com/) (Node.js) e as seguintes tecnologias:
+
+| Tecnologia        | Versão  | Uso principal                                  |
+| ----------------- | ------- | ---------------------------------------------- |
+| **NestJS**        | 10.x    | Framework backend (módulos, controllers, services) |
+| **Node.js**       | 20.x    | Runtime                                       |
+| **TypeScript**    | 5.1.x   | Tipagem estática                              |
+| **TypeORM**       | 0.3.x   | ORM e acesso ao PostgreSQL                    |
+| **PostgreSQL**    | (pg 8.x)| Banco de dados (driver `pg`)                   |
+| **class-validator** | 0.14.x | Validação de DTOs (decorators)              |
+| **class-transformer** | 0.5.x | Transformação de objetos (ex.: nested DTOs) |
+
+## Estrutura do projeto
+
+- **src/main.ts** — Bootstrap da aplicação NestJS
+- **src/app.module.ts** — Módulo raiz (importa Categoria, Prato, Pedido, ItemPedido, TypeORM, etc.)
+- **categoria/** — Módulo de categorias: controller, service, DTO, entity
+- **prato/** — Módulo de pratos (cardápio): controller, service, DTO, entity
+- **pedido/** — Módulo de pedidos: controller, service, DTO, entity, pipes
+- **item_pedido/** — Módulo de itens do pedido (entidade vinculada a pedido e prato)
+
+Cada módulo segue o padrão NestJS: **controller** (rotas HTTP), **service** (lógica e acesso ao banco), **dto/** (validação de entrada), **entities/** (TypeORM).
+
+## Scripts principais
+
+Na pasta `backend`:
+
+```bash
+npm run start        # Desenvolvimento (uma execução)
+npm run start:dev    # Modo watch (recompila ao alterar arquivos)
+npm run start:prod   # Produção (node dist/main)
+npm run build        # Compila para dist/
+```
+
+## Banco de dados
+
+O projeto usa **PostgreSQL** (banco `restaurante_1`). As tabelas são criadas a partir do script `restaurante.sql` na raiz do repositório. O Docker Compose sobe o container do Postgres; a conexão TypeORM é configurada via variáveis de ambiente (ex.: `.env` no backend).
+
+## API e documentação
+
+Todos os endpoints estão sob o prefixo **/api** (ex.: `/api/categoria/listar`, `/api/prato/listar`, `/api/pedido`). A referência completa está na aba **API reference** desta documentação (OpenAPI).
+
+<Card title="Referência da API" icon="code" href="/api-reference/introduction">
+  Endpoints e especificação OpenAPI.
+</Card>
+
+<Card title="Frontend (Next.js)" icon="desktop" href="/NextJs">
+  Stack e tecnologias do frontend.
+</Card>

@@ -1,216 +1,302 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "App Pedidos API",
+    "description": "API REST do backend NestJS do App Pedidos (restaurante). Endpoints para categorias, pratos e pedidos.",
     "version": "1.0.0"
   },
   "servers": [
-    {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
+    { "url": "http://localhost:3000", "description": "Backend local" }
   ],
   "paths": {
-    "/plants": {
+    "/api/categoria/listar": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
+        "summary": "Listar categorias",
+        "description": "Retorna todas as categorias de pratos (Sopas, Grelhados, Pizzas, etc.).",
+        "operationId": "getCategorias",
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "Lista de categorias",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Categoria" } }
               }
             }
           }
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/api/categoria/{id}": {
+      "get": {
+        "summary": "Buscar categoria por ID",
+        "operationId": "getCategoriaById",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "ID da categoria" }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
+          "200": { "description": "Categoria encontrada", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Categoria" } } } },
+          "404": { "description": "Categoria não encontrada" }
+        }
+      }
+    },
+    "/api/categoria": {
+      "post": {
+        "summary": "Criar categoria",
+        "operationId": "createCategoria",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CategoriaInput" } }
+          }
+        },
+        "responses": {
+          "201": { "description": "Categoria criada", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Categoria" } } } },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/api/prato/listar": {
+      "get": {
+        "summary": "Listar pratos",
+        "description": "Retorna todos os pratos do cardápio.",
+        "operationId": "getPratos",
+        "responses": {
+          "200": {
+            "description": "Lista de pratos",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Prato" } }
               }
             }
           }
         }
       }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
+    },
+    "/api/prato/visualizar/{id}": {
+      "get": {
+        "summary": "Visualizar prato por ID",
+        "operationId": "getPratoById",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "ID do prato" }
+        ],
+        "responses": {
+          "200": { "description": "Prato encontrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Prato" } } } },
+          "404": { "description": "Prato não encontrado" }
+        }
+      }
+    },
+    "/api/prato/buscarIds/{ids}": {
+      "get": {
+        "summary": "Buscar pratos por IDs",
+        "description": "Retorna os pratos cujos IDs são passados separados por vírgula. Usado na tela Meu Pedido para carregar os itens do pedido.",
+        "operationId": "getPratosByIds",
+        "parameters": [
+          { "name": "ids", "in": "path", "required": true, "schema": { "type": "string" }, "description": "IDs separados por vírgula (ex: 1,2,3)" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de pratos",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Prato" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/prato": {
       "post": {
-        "description": "Information about a new plant added to the store",
+        "summary": "Criar prato",
+        "operationId": "createPrato",
         "requestBody": {
-          "description": "Plant added to the store",
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/PratoInput" } }
+          }
+        },
+        "responses": {
+          "201": { "description": "Prato criado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Prato" } } } },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/api/prato/{id}": {
+      "put": {
+        "summary": "Atualizar prato",
+        "operationId": "updatePrato",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/PratoInput" } }
+          }
+        },
+        "responses": {
+          "200": { "description": "Prato atualizado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Prato" } } } },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/api/prato/updateStatus/{id}": {
+      "put": {
+        "summary": "Atualizar status do prato",
+        "operationId": "updatePratoStatus",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Status atualizado" }
+        }
+      }
+    },
+    "/api/pedido/{cpf}": {
+      "get": {
+        "summary": "Buscar pedidos por CPF",
+        "description": "Retorna os pedidos associados ao CPF do cliente.",
+        "operationId": "getPedidosByCpf",
+        "parameters": [
+          { "name": "cpf", "in": "path", "required": true, "schema": { "type": "string" }, "description": "CPF do cliente" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de pedidos",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Pedido" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pedido/listPedido/{cpf}": {
+      "get": {
+        "summary": "Listar pedidos por CPF",
+        "operationId": "listPedidoByCpf",
+        "parameters": [
+          { "name": "cpf", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Lista de pedidos do cliente" }
+        }
+      }
+    },
+    "/api/pedido": {
+      "post": {
+        "summary": "Criar pedido",
+        "description": "Registra um novo pedido. Usado na tela Meu Pedido ao clicar em **Pedir**. O corpo deve incluir mesa, cliente e lista de pratos (com id).",
+        "operationId": "createPedido",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/PedidoInput" } }
+          }
+        },
+        "responses": {
+          "201": { "description": "Pedido criado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PedidoResposta" } } } },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/api/pedido/updateStatus/{id}": {
+      "put": {
+        "summary": "Atualizar status do pedido",
+        "operationId": "updatePedidoStatus",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } },
+          { "name": "status", "in": "query", "schema": { "type": "string" }, "description": "Novo status (ex: Preparando, Pronto)" }
+        ],
+        "requestBody": {
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
+              "schema": { "type": "object", "properties": { "status": { "type": "string" } } }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
-          }
+          "200": { "description": "Status atualizado" }
         }
       }
     }
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "Categoria": {
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "status": { "type": "boolean" },
+          "icone": { "type": "string" }
+        }
+      },
+      "CategoriaInput": {
+        "type": "object",
+        "required": ["nome", "status", "icone"],
+        "properties": {
+          "nome": { "type": "string" },
+          "status": { "type": "boolean" },
+          "icone": { "type": "string" }
+        }
+      },
+      "Prato": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "descricao": { "type": "string" },
+          "preco": { "type": "number", "format": "decimal" },
+          "tempo_preparo": { "type": "integer" },
+          "status": { "type": "boolean" },
+          "categoria": { "$ref": "#/components/schemas/Categoria" }
+        }
+      },
+      "PratoInput": {
+        "type": "object",
+        "required": ["nome", "descricao", "preco", "tempo_preparo", "status", "categoria"],
+        "properties": {
+          "nome": { "type": "string" },
+          "descricao": { "type": "string" },
+          "preco": { "type": "number" },
+          "tempo_preparo": { "type": "number" },
+          "status": { "type": "boolean" },
+          "categoria": { "$ref": "#/components/schemas/Categoria" }
+        }
+      },
+      "Pedido": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "numero_mesa": { "type": "integer" },
+          "cpf_cliente": { "type": "string" },
+          "nome_cliente": { "type": "string" },
+          "status": { "type": "string" },
+          "data_pedido": { "type": "string", "format": "date-time" }
+        }
+      },
+      "PedidoInput": {
+        "type": "object",
+        "required": ["numero_mesa", "cpf_cliente", "nome_cliente", "status", "pratos"],
+        "properties": {
+          "numero_mesa": { "type": "integer" },
+          "cpf_cliente": { "type": "string" },
+          "nome_cliente": { "type": "string" },
+          "status": { "type": "string", "example": "Preparando" },
+          "pratos": {
+            "type": "array",
+            "items": { "type": "object", "properties": { "id": { "type": "integer" } }, "required": ["id"] }
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+      "PedidoResposta": {
         "type": "object",
         "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          }
+          "pedido": { "$ref": "#/components/schemas/Pedido" },
+          "itensPedido": { "type": "array" }
         }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
       }
     }
   }

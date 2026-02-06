@@ -72,17 +72,17 @@ O usuário chega a essa tela após se identificar (nome, CPF, mesa) na home e ad
 
 ## Elementos da interface
 
-| Elemento | Descrição |
-|----------|-----------|
-| **Título** | "Meu Pedido" |
-| **Subtítulo** | Nome do cliente e número da mesa (ex.: "João #5") |
-| **Lista de itens** | Para cada prato: número (id), nome, categoria (ícone + nome), preço (ícone), tempo de preparo em minutos (ícone). Separadores entre itens. |
-| **Botão Cancelar** | Vermelho; limpa dados e volta à home. |
-| **Botão Cardapio** | Amarelo; navega para `/prato`. |
-| **Botão Pedir** | Azul (primary); envia o pedido à API. |
-| **Pedido sem itens** | Quando não há pratos: mensagem "Pedido sem itens" e botão para ir ao Cardápio. |
+| Elemento             | Descrição                                                                                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Título**           | "Meu Pedido"                                                                                                                                           |
+| **Subtítulo**        | Nome do cliente e número da mesa (ex.: "João #5")                                                                                                      |
+| **Lista de itens**   | Para cada prato: número (id), nome, categoria (ícone + nome), preço (ícone), tempo de preparo em minutos (ícone). Separadores entre itens.             |
+| **Botão Cancelar**   | Vermelho; limpa dados e volta à home.                                                                                                                  |
+| **Botão Cardapio**   | Amarelo; navega para `/prato`.                                                                                                                         |
+| **Botão Pedir**      | Azul (primary); envia o pedido à API.                                                                                                                  |
+| **Pedido sem itens** | Quando não há pratos: mensagem "Pedido sem itens" e botão para ir ao Cardápio.                                                                         |
 | **Status pós-envio** | Após clicar em Pedir: mensagem "Tudo certo seu pedido foi confirmado" ou "Ouve um erro ao processar seu pedido". Em sucesso, o `localStorage` é limpo. |
-| **SnackBarAlert** | Exibe notificações: erro ao buscar dados do pedido, "Pedido registrado" (sucesso) ou "Erro, não foi possivel registrar o pedido" (erro). |
+| **SnackBarAlert**    | Exibe notificações: erro ao buscar dados do pedido, "Pedido registrado" (sucesso) ou "Erro, não foi possivel registrar o pedido" (erro).               |
 
 ---
 
@@ -90,13 +90,13 @@ O usuário chega a essa tela após se identificar (nome, CPF, mesa) na home e ad
 
 ### Endpoints utilizados
 
-1. **GET `api/prato/buscarIds/:ids`**  
-   - Usado para obter os detalhes dos pratos do pedido (ids no `localStorage`).  
-   - Parâmetro: lista de IDs separados por vírgula.  
+1. **GET `api/prato/buscarIds/:ids`**
+   - Usado para obter os detalhes dos pratos do pedido (ids no `localStorage`).
+   - Parâmetro: lista de IDs separados por vírgula.
    - Retorno: array de pratos com id, nome, categoria, preco, tempo_preparo, etc.
 
-2. **POST `api/pedido`**  
-   - Usado ao clicar em **Pedir**.  
+2. **POST `api/pedido`**
+   - Usado ao clicar em **Pedir**.
    - Body esperado (exemplo):
 
 ```json
@@ -109,7 +109,7 @@ O usuário chega a essa tela após se identificar (nome, CPF, mesa) na home e ad
 }
 ```
 
-- Validação no backend: `numero_mesa` (número), `cpf_cliente`, `nome_cliente`, `status` (string), `pratos` (array de objetos com `id`).  
+- Validação no backend: `numero_mesa` (número), `cpf_cliente`, `nome_cliente`, `status` (string), `pratos` (array de objetos com `id`).
 - Resposta de sucesso: status 201 e corpo com `pedido` e `itensPedido`.
 
 ### Comportamento após sucesso

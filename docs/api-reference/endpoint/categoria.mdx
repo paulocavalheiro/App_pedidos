@@ -1,0 +1,12 @@
+---
+title: 'Categoria'
+description: 'Endpoints de categorias de pratos'
+openapi: 'GET /api/categoria/listar'
+---
+
+Recursos para listar, buscar e criar categorias (ex.: Sopas, Grelhados, Pizzas).
+
+## Outros endpoints
+
+- **GET /api/categoria/:id** — Busca uma categoria pelo ID.
+- **POST /api/categoria** — Cria uma categoria. Body: `{ "nome": string, "status": boolean, "icone": string }`.

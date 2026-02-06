@@ -18,3 +18,14 @@ Se preferir rodar o projeto sem o Docker, ajuste o arquivo .env do backend, alte
 Após criar o container do banco de dados, execute as instruções para criar as tabelas usando o arquivo restaurante.sql, que está localizado na raiz do projeto.
 
 Também há um arquivo JSON com todos os endpoints disponíveis para auxiliar, chamado backendRestaurante.postman_collection.json.
+
+## Documentação (Mintlify)
+
+A documentação do projeto está na pasta `docs/`. Para visualizar localmente:
+
+```bash
+cd docs
+mint dev
+```
+
+Abra `http://localhost:3000`. **Sempre rode `mint dev` de dentro da pasta `docs/`**, não da raiz do projeto.

@@ -1,0 +1,13 @@
+---
+title: 'Pedido'
+description: 'Endpoints de pedidos'
+openapi: 'POST /api/pedido'
+---
+
+Recursos para buscar, listar, criar e atualizar status de pedidos. O endpoint **POST /api/pedido** é usado na tela **Meu Pedido** ao clicar em **Pedir** (mesa, cliente e lista de pratos com `id`).
+
+## Outros endpoints
+
+- **GET /api/pedido/:cpf** — Busca pedidos pelo CPF do cliente.
+- **GET /api/pedido/listPedido/:cpf** — Lista pedidos do cliente por CPF.
+- **PUT /api/pedido/updateStatus/:id** — Atualiza o status do pedido (ex.: Preparando, Pronto). Body pode incluir `status`.

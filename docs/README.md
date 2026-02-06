@@ -20,13 +20,16 @@ Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your d
 npm i -g mint
 ```
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
+Run the following command **from inside this `docs` folder** (where `docs.json` is located):
 
-```
+```bash
+cd docs
 mint dev
 ```
 
 View your local preview at `http://localhost:3000`.
+
+**Important:** For this project, always run `mint dev` from the **docs** folder, not from the project root. Running from the root can cause "module is not defined" or "exports is not defined" errors because Mintlify would try to bundle backend and frontend code.
 
 ## Publishing changes
 
